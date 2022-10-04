@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -46,19 +47,35 @@ public class MyClass {
         
     }
 
-    public static void write (String filename, int[]x) throws IOException {
+    public static void write_in_file(String filename, int[]x) throws IOException {
 
         BufferedWriter outputWriter = null;
         outputWriter = new BufferedWriter(new FileWriter("nums.txt",true));
         outputWriter.write("Целое число: "+x[0]+", числитель: "+x[1]+", знаменатель: "+x[2]+". Исходные данные: "+x[3]+", "+x[4]+".\n");
         outputWriter.flush();
         outputWriter.close();
-        System.out.println("Целое число: "+x[0]+", числитель: "+x[1]+", знаменатель: "+x[2]+". Исходные данные: "+x[3]+", "+x[4]+".");
+        System.out.println("[Log]: "+"Целое число: "+x[0]+", числитель: "+x[1]+", знаменатель: "+x[2]+". Исходные данные: "+x[3]+", "+x[4]+".");
+    }
+
+    public static void writeByte(String filename, int[]x){
+        String text = ("Целое число: "+x[0]+", числитель: "+x[1]+", знаменатель: "+x[2]+". Исходные данные: "+x[3]+", "+x[4]+".");
+        try(FileOutputStream fos = new FileOutputStream("bytecode"))
+        {
+            byte[] buffer = text.getBytes();
+            System.out.println("[Log]: "+buffer);
+            fos.write(buffer,0,buffer.length);
+
+            System.out.println("[Log]: "+"Записано в двоичный поток.");
+        }
+        catch(IOException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
     
     public static void main(String[] args) throws IOException {
         int[] x = find();
-        write("nums.txt",x);
+        write_in_file("nums.txt",x);
+        writeByte("bytecode", x);
     }
 
 }
